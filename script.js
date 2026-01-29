@@ -172,6 +172,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // --- Timeline Scroll Progress Logic ---
+    const timelineSection = document.getElementById('implementation');
+    const timelineContainer = document.getElementById('implementation-timeline');
+    const timelineProgress = document.getElementById('timeline-progress-bar');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+
+    function updateTimelineProgress() {
+        if (!timelineContainer || !timelineProgress) return;
+
+        const containerRect = timelineContainer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Start filling when container enters viewport (e.g. at 2/3 height)
+        const startOffset = windowHeight * 0.7;
+
+        // Calculate progress based on scroll relative to container
+        // We want the line to "draw" as we scroll down the items
+
+        const containerTop = containerRect.top;
+        const containerHeight = containerRect.height;
+
+        // How far have we scrolled past the start of the container?
+        // We want the "drawing point" to be around the center of the screen
+        const drawingPoint = windowHeight / 2;
+
+        let progressHeight = drawingPoint - containerTop;
+
+        // Clamp values
+        if (progressHeight < 0) progressHeight = 0;
+        if (progressHeight > containerHeight) progressHeight = containerHeight;
+
+        timelineProgress.style.height = `${progressHeight}px`;
+
+        // Activate items based on progress
+        timelineItems.forEach(item => {
+            const itemTop = item.getBoundingClientRect().top - containerTop; // Position relative to container
+
+            if (progressHeight >= itemTop) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    if (timelineContainer) {
+        window.addEventListener('scroll', updateTimelineProgress, { passive: true });
+        updateTimelineProgress(); // Initial check
+    }
+
     // --- Calculator Logic ---
     const inputBill = document.getElementById('input-bill');
     const inputWaste = document.getElementById('input-waste');

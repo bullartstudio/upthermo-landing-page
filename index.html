@@ -60,8 +60,11 @@
             <div class="hero-text">
                 <p class="hero-eyebrow">Technologia ORC dla Przemysłu</p>
                 <h1 class="hero-title">
-                    Fotowoltaika daje energię przez 6 godzin.<br>
-                    <span class="text-primary">ORC zapewnia energię przez 24 godziny</span> — z Państwa odpadów.
+                    <span class="d-block text-white mb-2"
+                        style="font-size: 0.6em; opacity: 0.9; font-weight: 500;">Technologia ORC dla Przemysłu
+                        Drzewnego</span>
+                    Energia z Odpadów Drzewnych.<br>
+                    <span class="text-primary">Produkcja Prądu 24/7.</span>
                 </h1>
                 <p class="hero-subtitle">
                     Dla zakładów przemysłowych z rachunkiem 80–110 tys. zł miesięcznie za energię elektryczną.<br>
@@ -590,7 +593,7 @@
                     </div>
 
                     <h3 class="inaction-title">Każdy Dzień Bez <span class="text-highlight">Efektywnej Produkcji
-                            Prądu</span> To:</h3>
+                            Prądu z ORC</span> To:</h3>
                     <div class="inaction-daily-loss tabular-nums" id="daily-loss" aria-live="polite">−2 558 zł</div>
                     <p class="inaction-sub">utraconych oszczędności na rachunkach za prąd</p>
 
@@ -673,7 +676,7 @@
                     </svg>
                     Zacznij Oszczędzać — Zamów Bezpłatną Wycenę
                 </a>
-                <p class="cta-note">Odpowiedź w ciągu 24h • Bez zobowiązań</p>
+                <p class="cta-note">Szybka odpowiedź • Bez zobowiązań</p>
             </div>
         </div>
     </section>
@@ -681,10 +684,13 @@
     <!-- Implementation Timeline Section -->
     <section id="implementation" class="section-padding bg-light">
         <div class="container animate-on-scroll">
-            <h2 class="section-title text-center">Proces Wdrożenia — Od Analizy do Uruchomienia</h2>
+            <h2 class="section-title text-center">Proces Wdrożenia Instalacji ORC— Od Analizy do Uruchomienia</h2>
             <p class="section-subtitle text-center">Kompleksowa realizacja projektu w 5 etapach</p>
 
-            <div class="timeline">
+            <div class="timeline" id="implementation-timeline">
+                <div class="timeline-line-bg"></div>
+                <div class="timeline-line-progress" id="timeline-progress-bar"></div>
+
                 <div class="timeline-item">
                     <div class="timeline-marker">1</div>
                     <div class="timeline-content">
@@ -846,36 +852,81 @@
                     <p class="lead-description">Nasi eksperci przeanalizują Państwa sytuację energetyczną i przygotują
                         indywidualną kalkulację oszczędności. Bez zobowiązań.</p>
 
-                    <ul class="lead-benefits">
-                        <li>
+                    <div class="lead-benefits-grid">
+                        <div class="lead-benefit-card">
+                            <div class="lb-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                                </svg>
+                            </div>
+                            <div class="lb-text">
+                                <strong>Analiza Energetyczna</strong>
+                                <p>Pełny audyt zużycia energii i dostępności biomasy w zakładzie.</p>
+                            </div>
+                        </div>
+
+                        <div class="lead-benefit-card">
+                            <div class="lb-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div class="lb-text">
+                                <strong>Kalkulacja ROI</strong>
+                                <p>Szczegółowy raport opłacalności i okresu zwrotu z inwestycji.</p>
+                            </div>
+                        </div>
+
+                        <div class="lead-benefit-card">
+                            <div class="lb-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <div class="lb-text">
+                                <strong>Analiza Dofinansowań</strong>
+                                <p>Sprawdzenie dostępnych dotacji (NFOŚiGW, fundusze UE).</p>
+                            </div>
+                        </div>
+
+                        <div class="lead-benefit-card">
+                            <div class="lb-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div class="lb-text">
+                                <strong>Harmonogram Wdrożenia</strong>
+                                <p>Wstępny plan realizacji od projektu do uruchomienia.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lead-trust">
+                        <div class="trust-item">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <polyline points="20 6 9 17 4 12"></polyline>
+                                stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                             </svg>
-                            Analiza zużycia energii i dostępności biomasy
-                        </li>
-                        <li>
+                            <span>Gwarancja Poufności (NDA)</span>
+                        </div>
+                        <div class="trust-item">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <polyline points="20 6 9 17 4 12"></polyline>
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
                             </svg>
-                            Kalkulacja ROI dla Państwa zakładu
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            Informacja o możliwych dofinansowaniach
-                        </li>
-                        <li>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" aria-hidden="true">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                            Wstępny harmonogram realizacji
-                        </li>
-                    </ul>
+                            <span>Doświadczenie 15+ lat</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="lead-form-wrapper">
@@ -946,7 +997,7 @@
                             </svg>
                         </button>
 
-                        <p class="form-note">Odpowiadamy w ciągu 24 godzin w dni robocze</p>
+                        <p class="form-note">Szybka odpowiedź • Darmowa wycena</p>
                     </form>
                 </div>
             </div>
@@ -1025,13 +1076,7 @@
         </div>
     </footer>
 
-    <!-- Sticky CTA -->
-    <div id="sticky-cta" class="sticky-cta" role="complementary" aria-label="Szybki kontakt">
-        <div class="container sticky-content">
-            <p class="sticky-text">Gotowi na oszczędności? <strong>Zamów bezpłatną analizę</strong></p>
-            <a href="#lead-capture" class="btn btn-primary">Bezpłatna Wycena</a>
-        </div>
-    </div>
+
 
     <!-- Cookie Consent Banner -->
     <div id="cookie-banner" class="cookie-banner">
@@ -1043,6 +1088,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Upthermo Sp. z o.o.",
+      "url": "https://upthermo.pl",
+      "logo": "https://upthermo.pl/img/logo.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "kontakt@upthermo.pl",
+        "contactType": "sales",
+        "areaServed": "PL",
+        "availableLanguage": "Polish"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/upthermo"
+      ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Turbina ORC Upthermo",
+      "description": "System kogeneracyjny ORC zamieniający ciepło z odpadów biomasy na energię elektryczną i cieplną.",
+      "brand": {
+        "@type": "Brand",
+        "name": "Upthermo"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "name": "Zakłady Przemysłu Drzewnego"
+      }
+    }
+    </script>
 
     <!-- Scripts -->
     <script src="script.js" defer></script>
