@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('calc-bill-monthly').value = new Intl.NumberFormat('pl-PL').format(billMonth) + ' PLN';
             document.getElementById('calc-waste-daily').value = wasteTons + ' ton';
             document.getElementById('calc-shifts').value = shifts;
-            document.getElementById('calc-has_solar').value = hasSolar ? 'Tak' : 'Nie';
+            document.getElementById('calc-has-solar').value = hasSolar ? 'Tak' : 'Nie';
             document.getElementById('calc-savings-yearly').value = formatMoney(savingsYear);
         }
 
