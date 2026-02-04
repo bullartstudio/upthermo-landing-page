@@ -4,59 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('scroll-progress');
     const mainHeader = document.getElementById('main-header');
 
-    // --- Chart.js Implementation ---
-    const chartCtx = document.getElementById('production-chart');
-    if (chartCtx) {
-        new Chart(chartCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Sty', 'Lut', 'Mar', 'Kwi', 'Maj', 'Cze', 'Lip', 'Sie', 'Wrz', 'Paź', 'Lis', 'Gru'],
-                datasets: [
-                    {
-                        label: 'Turbina ORC (250 kW)',
-                        data: Array(12).fill(165000), // ~165 MWh constant
-                        backgroundColor: '#FF6B35',
-                        borderRadius: 4
-                    },
-                    {
-                        label: 'Fotowoltaika (250 kWp)',
-                        // PV production curve approx (low in winter, high in summer) in kWh
-                        data: [9000, 15000, 25000, 35000, 45000, 48000, 49000, 46000, 35000, 20000, 10000, 8000],
-                        backgroundColor: '#FFD166',
-                        borderRadius: 4
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { color: 'white', font: { size: 14 } }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Miesięczna Produkcja Energii [kWh]',
-                        color: 'white',
-                        font: { size: 16 }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: { color: 'rgba(255, 255, 255, 0.7)' }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: 'rgba(255, 255, 255, 0.7)' }
-                    }
-                }
-            }
-        });
-    }
-
     // --- Cookie Consent Logic ---
+
     const cookieBanner = document.getElementById('cookie-banner');
     const btnAcceptCookies = document.getElementById('btn-accept-cookies');
 
@@ -224,17 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Calculator Logic ---
     const inputBill = document.getElementById('input-bill');
-    const inputWaste = document.getElementById('input-waste');
     const shiftsInputs = document.querySelectorAll('input[name="shifts"]');
     const solarInputs = document.querySelectorAll('input[name="solar"]');
+    const modernizationInputs = document.querySelectorAll('input[name="modernization"]');
 
     const valBill = document.getElementById('val-bill');
-    const valWaste = document.getElementById('val-waste');
 
     // Results Elements
     const resCurrentBill = document.getElementById('res-current-bill');
     const resSavingsYear = document.getElementById('res-savings-year');
-    const resSavingsContext = document.getElementById('res-savings-context');
+    const resSavingsMonth = document.getElementById('res-savings-month');
     const bonusesContainer = document.getElementById('bonuses-container');
 
     // Inaction Elements
@@ -243,7 +191,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const loss6mEl = document.getElementById('loss-6m');
     const loss1yEl = document.getElementById('loss-1y');
 
-    if (inputBill && inputWaste) {
+    if (inputBill) {
+
+        // Update range slider gradient based on value
+        function updateRangeGradient(input) {
+            const min = parseFloat(input.min);
+            const max = parseFloat(input.max);
+            const val = parseFloat(input.value);
+            const percentage = ((val - min) / (max - min)) * 100;
+            input.style.background = `linear-gradient(to right, #FF6B35 0%, #FF6B35 ${percentage}%, #e0e0e0 ${percentage}%, #e0e0e0 100%)`;
+        }
 
         function formatMoney(amount) {
             return new Intl.NumberFormat('pl-PL', {
@@ -256,15 +213,15 @@ document.addEventListener('DOMContentLoaded', () => {
         function calculate() {
             // Inputs
             const billMonth = parseInt(inputBill.value);
-            const wasteTons = parseInt(inputWaste.value);
             let shifts = 3;
             shiftsInputs.forEach(r => { if (r.checked) shifts = parseInt(r.value); });
             let hasSolar = false;
             solarInputs.forEach(r => { if (r.checked) hasSolar = (r.value === 'true'); });
+            let hasModernization = false;
+            modernizationInputs.forEach(r => { if (r.checked) hasModernization = (r.value === 'true'); });
 
             // Update UI Labels
             valBill.textContent = new Intl.NumberFormat('pl-PL').format(billMonth) + ' PLN';
-            valWaste.textContent = wasteTons + ' ton';
 
             // Logic
             let savingsPercent = 0.60;
@@ -285,17 +242,13 @@ document.addEventListener('DOMContentLoaded', () => {
             resCurrentBill.textContent = formatMoney(currentBillYear);
             resSavingsYear.textContent = formatMoney(savingsYear);
 
-            // Dynamic context text
-            if (resSavingsContext) {
-                const savingsInMillions = savingsYear / 1000000;
-                if (savingsInMillions >= 1) {
-                    resSavingsContext.innerHTML = `To ponad <strong>${savingsInMillions.toFixed(1).replace('.', ',')} mln zł</strong> rocznie`;
-                } else if (savingsYear >= 500000) {
-                    resSavingsContext.innerHTML = `To ponad <strong>pół miliona złotych</strong> rocznie`;
-                } else {
-                    resSavingsContext.innerHTML = `To <strong>${Math.round(savingsYear / 1000)} tys. zł</strong> oszczędności rocznie`;
-                }
+            // Update monthly savings
+            if (resSavingsMonth) {
+                resSavingsMonth.textContent = '~' + formatMoney(Math.round(savingsMonth));
             }
+
+            // Update range slider gradient
+            updateRangeGradient(inputBill);
 
             // Dynamic Bonuses with SVG icons
             let bonusHTML = `
@@ -336,17 +289,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update Hidden Keywords for Form
             document.getElementById('calc-bill-monthly').value = new Intl.NumberFormat('pl-PL').format(billMonth) + ' PLN';
-            document.getElementById('calc-waste-daily').value = wasteTons + ' ton';
             document.getElementById('calc-shifts').value = shifts;
             document.getElementById('calc-has-solar').value = hasSolar ? 'Tak' : 'Nie';
+            document.getElementById('calc-modernization').value = hasModernization ? 'Tak' : 'Nie';
             document.getElementById('calc-savings-yearly').value = formatMoney(savingsYear);
         }
 
         // Event Listeners
         inputBill.addEventListener('input', calculate);
-        inputWaste.addEventListener('input', calculate);
         shiftsInputs.forEach(el => el.addEventListener('change', calculate));
         solarInputs.forEach(el => el.addEventListener('change', calculate));
+        modernizationInputs.forEach(el => el.addEventListener('change', calculate));
 
         // Initial Calc
         calculate();
@@ -359,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     const msgField = document.getElementById('contact-message');
                     if (msgField) {
-                        msgField.value = `Proszę o ofertę na podstawie moich wyliczeń:\n- Rachunek: ${valBill.textContent}\n- Odpady: ${valWaste.textContent}\n- Przewidywana oszczędność: ${resSavingsYear.textContent}`;
+                        msgField.value = `Proszę o ofertę na podstawie moich wyliczeń:\n- Rachunek: ${valBill.textContent}\n- Przewidywana oszczędność: ${resSavingsYear.textContent}`;
                         msgField.focus();
                     }
                 }, 800);
@@ -428,11 +381,11 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Miesięczna Produkcja Energii (Stabilność ORC vs Sezonowość PV)',
+                        text: 'Miesięczna Produkcja Energii [kWh]',
                         font: { size: 14, weight: '600' }
                     },
                     legend: {
@@ -442,7 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: { display: true, text: 'kWh' },
                         ticks: {
                             callback: function (value) {
                                 return new Intl.NumberFormat('pl-PL').format(value);
@@ -473,6 +425,95 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // --- Report Download Form ---
+    const reportForm = document.getElementById('report-download-form');
+
+    if (reportForm) {
+        reportForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const emailInput = document.getElementById('report-email');
+            const email = emailInput.value.trim();
+            const submitBtn = reportForm.querySelector('button[type="submit"]');
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                emailInput.classList.add('error');
+                emailInput.focus();
+                return;
+            }
+
+            emailInput.classList.remove('error');
+
+            // Show loading state
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spin">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                </svg>
+                Pobieranie...
+            `;
+            submitBtn.disabled = true;
+
+            try {
+                // Send email to FormSubmit (async, don't wait)
+                fetch('https://formsubmit.co/ajax/biuro@upthermo.com', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        _subject: 'Pobranie raportu OZE - Upthermo',
+                        message: 'Użytkownik pobrał raport "Analiza opłacalności technologii OZE"'
+                    })
+                }).catch(() => {});
+
+                // Trigger PDF download
+                const link = document.createElement('a');
+                link.href = 'pdf/Analiza opłacalności technologii OZE.pdf';
+                link.download = 'Analiza opłacalności technologii OZE.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Show success state
+                submitBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    Pobrano!
+                `;
+                submitBtn.style.background = '#10B981';
+
+                // Reset form after delay
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.background = '';
+                    emailInput.value = '';
+                }, 3000);
+
+            } catch (error) {
+                // Reset on error
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Remove error class on input
+        const reportEmailInput = document.getElementById('report-email');
+        if (reportEmailInput) {
+            reportEmailInput.addEventListener('input', () => {
+                reportEmailInput.classList.remove('error');
+            });
+        }
+    }
 
     console.log('Upthermo ORC Landing Page Loaded');
 });
