@@ -1750,9 +1750,44 @@ input[type="range"]::-webkit-slider-thumb {
     display: none;
 }
 
+.main-nav.mobile-open {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-hero);
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+}
+
+.main-nav.mobile-open .nav-list {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.main-nav.mobile-open .nav-link {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+}
+
 @media (min-width: 1024px) {
     .main-nav {
         display: block;
+    }
+
+    .main-nav.mobile-open {
+        position: static;
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .main-nav.mobile-open .nav-list {
+        flex-direction: row;
+        gap: 2rem;
     }
 }
 
