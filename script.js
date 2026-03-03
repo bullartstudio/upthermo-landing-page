@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Script loaded - DOMContentLoaded');
 
     // --- Scroll Progress Bar ---
     const progressBar = document.getElementById('scroll-progress');
@@ -87,11 +88,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainNav = document.querySelector('.main-nav');
 
     if (mobileMenuToggle && mainNav) {
-        mobileMenuToggle.addEventListener('click', () => {
-            const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
-            mobileMenuToggle.setAttribute('aria-expanded', !isExpanded);
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', String(!isExpanded));
             mainNav.classList.toggle('mobile-open');
+            console.log('Menu toggled:', mainNav.classList.contains('mobile-open'));
         });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mainNav.classList.contains('mobile-open') &&
+                !mainNav.contains(e.target) &&
+                !mobileMenuToggle.contains(e.target)) {
+
+                mainNav.classList.remove('mobile-open');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close menu on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mainNav.classList.contains('mobile-open')) {
+                mainNav.classList.remove('mobile-open');
+                mobileMenuToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+    } else {
+        console.warn('Mobile menu elements not found:', { mobileMenuToggle, mainNav });
     }
 
     // --- Smooth Scroll for Anchor Links ---
@@ -360,6 +385,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctxProd = document.getElementById('production-chart');
         if (!ctxProd) return;
 
+        // Destroy existing chart if it exists
+        const existingChart = Chart.getChart(ctxProd);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+
         new Chart(ctxProd, {
             type: 'bar',
             data: {
@@ -471,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         _subject: 'Pobranie raportu OZE - Upthermo',
                         message: 'Użytkownik pobrał raport "Analiza opłacalności technologii OZE"'
                     })
-                }).catch(() => {});
+                }).catch(() => { });
 
                 // Trigger PDF download
                 const link = document.createElement('a');
